@@ -130,3 +130,6 @@ dmypy.json
 
 #Datasets
 /Datasets/c*
+
+#Mac files
+.DS_Store
