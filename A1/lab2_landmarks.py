@@ -1,13 +1,10 @@
 import os
 import numpy as np
-from keras.preprocessing import image
+import tensorflow.keras.utils as image
 import cv2
 import dlib
+import pandas as pd
 
-# PATH TO ALL IMAGES
-global basedir, image_paths, target_size
-basedir = '../Datasets'
-images_dir = os.path.join(basedir,'celeba')
 labels_filename = 'labels.csv'
 
 detector = dlib.get_frontal_face_detector()
@@ -91,7 +88,7 @@ def run_dlib_shape(image):
 
     return dlibout, resized_image
 
-def extract_features_labels():
+def extract_features_labels(img_path, labels_path):
     """
     This funtion extracts the landmarks features for all images in the folder 'dataset/celeba'.
     It also extracts the gender label for each image.
@@ -99,24 +96,30 @@ def extract_features_labels():
         landmark_features:  an array containing 68 landmark points for each image in which a face was detected
         gender_labels:      an array containing the gender label (male=0 and female=1) for each image in
                             which a face was detected
+
+    labels is index, filename, gender, smiling
     """
-    image_paths = [os.path.join(images_dir, l) for l in os.listdir(images_dir)]
+    image_paths = [os.path.join(img_path, l) for l in os.listdir(img_path)]
     target_size = None
-    labels_file = open(os.path.join(basedir, labels_filename), 'r')
-    lines = labels_file.readlines()
-    gender_labels = {line.split(',')[0] : int(line.split(',')[6]) for line in lines[2:]}
-    if os.path.isdir(images_dir):
+    labels_file = open(os.path.join(labels_path, labels_filename), 'r')
+    labels_df = pd.read_csv(labels_file, sep='\t')
+    gender_labels = {row['img_name'] : row['gender'] for index, row in labels_df.iterrows()}
+
+    if os.path.isdir(img_path):
         all_features = []
         all_labels = []
+
         for img_path in image_paths:
-            file_name= img_path.split('.')[1].split('/')[-1]
+            file_name = img_path.split('/')[-1]
 
             # load image
             img = image.img_to_array(
                 image.load_img(img_path,
                                target_size=target_size,
                                interpolation='bicubic'))
+
             features, _ = run_dlib_shape(img)
+
             if features is not None:
                 all_features.append(features)
                 all_labels.append(gender_labels[file_name])
