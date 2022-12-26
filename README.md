@@ -17,7 +17,7 @@ conda activate ml-final
 Finally, one the library **dlib** needs to be installed manually using
 
 ```
-conda install -c conda-forge dlib=19.17
+conda install -c conda-forge dlib
 
 ```
 

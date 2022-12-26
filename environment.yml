@@ -1,7 +1,7 @@
 name: ml-final
 
 dependencies:
-  - python=3.7.0
+  - python=3.9
   - pip
   - pip:
       - numpy
