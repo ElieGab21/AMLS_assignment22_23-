@@ -92,6 +92,11 @@ def extract_features_labels(img_path, labels_path):
     """
     This funtion extracts the landmarks features for all images in the folder 'dataset/celeba'.
     It also extracts the gender label for each image.
+
+    :Args:
+        img_path: the path to the images folder
+        labels_path: the path to the labels.csv file
+
     :return:
         landmark_features:  an array containing 68 landmark points for each image in which a face was detected
         gender_labels:      an array containing the gender label (male=0 and female=1) for each image in
