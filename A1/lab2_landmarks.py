@@ -4,6 +4,7 @@ import tensorflow.keras.utils as image
 import cv2
 import dlib
 import pandas as pd
+import matplotlib.pyplot as plt
 
 labels_filename = 'labels.csv'
 
@@ -110,12 +111,23 @@ def extract_features_labels(img_path, labels_path):
     labels_df = pd.read_csv(labels_file, sep='\t')
     gender_labels = {row['img_name'] : row['gender'] for index, row in labels_df.iterrows()}
 
+    # all_images = [i for i in range(len(gender_labels.values()))]
+    # x = np.array(all_images)
+    # y = gender_labels.values()
+    # plt.scatter(x, y)
+    # plt.xlabel('Image number')
+    # plt.ylabel('Male or female distribution')
+    # plt.title('Male or female distribution by image')
+    # plt.show()
+
     if os.path.isdir(img_path):
         all_features = []
         all_labels = []
 
         for img_path in image_paths:
             file_name = img_path.split('/')[-1]
+
+            print(file_name)
 
             # load image
             img = image.img_to_array(

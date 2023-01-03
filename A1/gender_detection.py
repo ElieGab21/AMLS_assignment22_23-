@@ -1,6 +1,8 @@
 import A1.lab2_landmarks as l2
 import numpy as np
 from sklearn.metrics import classification_report,accuracy_score
+from sklearn.model_selection import GridSearchCV
+from sklearn.preprocessing import StandardScaler
 from sklearn import svm
 import os
 
@@ -26,12 +28,34 @@ def get_data():
     return tr_X, tr_Y, te_X, te_Y
 
 def img_SVM(training_images, training_labels, test_images, test_labels):
-    classifier = svm.SVC(kernel='poly', degree=3)
-    classifier.fit(training_images, training_labels)
-    pred = classifier.predict(test_images)
-    print("Accuracy:", accuracy_score(test_labels, pred))
+    # Can use gridsearch to test multiple hyperparameters
+    # https://www.geeksforgeeks.org/svm-hyperparameter-tuning-using-gridsearchcv-ml/
 
-   # print(pred)
+    #Model
+    classifier = svm.SVC()
+    # classifier.fit(training_images, training_labels)
+    # pred = classifier.predict(test_images)
+
+    #Finding the best parameters
+    param_grid = {'C': [0.01, 0.1, 1, 10],
+              'kernel': ['linear']} 
+
+    grid = GridSearchCV(classifier, param_grid, refit = True, verbose = 3)
+
+    #Scaling the data
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(training_images)
+    X_test = scaler .transform(test_images)
+
+    #Fitting and training the model with best parameters
+    grid.fit(X_train, training_labels)
+
+    pred = grid.predict(X_test)
+
+    print("Accuracy:", accuracy_score(test_labels, pred))
+    print(grid.best_params_)
+    print('Classification report \n', classification_report(test_labels, pred, zero_division=0))
+
     return pred
 
 def test_gender_detection():
