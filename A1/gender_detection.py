@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.metrics import classification_report,accuracy_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
-from sklearn import svm
+from sklearn.svm import SVC
 import os
 
 def get_data():
@@ -32,7 +32,7 @@ def img_SVM(training_images, training_labels, test_images, test_labels):
     # https://www.geeksforgeeks.org/svm-hyperparameter-tuning-using-gridsearchcv-ml/
 
     #Model
-    classifier = svm.SVC()
+    classifier = SVC()
     # classifier.fit(training_images, training_labels)
     # pred = classifier.predict(test_images)
 
