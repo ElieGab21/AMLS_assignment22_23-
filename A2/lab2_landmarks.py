@@ -112,6 +112,9 @@ def extract_features_labels(img_path, labels_path):
     labels_df = pd.read_csv(labels_file, sep='\t')
     smile_labels = {row['img_name'] : row['smiling'] for index, row in labels_df.iterrows()}
 
+    #Finding out how many images in the dataset are labeled smile
+    # print('smiles: ', sum(map((1).__eq__, smile_labels.values())))
+
     if os.path.isdir(img_path):
         all_features = []
         all_labels = []

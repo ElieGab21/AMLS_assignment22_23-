@@ -1,0 +1,69 @@
+import os
+import tensorflow.keras.utils as image
+from PIL import Image
+import numpy as np
+import pandas as pd
+import cv2
+
+LABELS_FILENAME = 'labels.csv'
+
+def get_image(img_path):
+
+    size = 500
+
+    img_array = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+    img_pil = Image.fromarray(img_array)
+    img_resized = np.array(img_pil.resize((size, size), Image.ANTIALIAS))
+
+    flat_image = img_resized.flatten()
+
+    return flat_image, img_resized
+
+def extract_features_labels(img_path, labels_path):
+    """
+    This funtion extracts the landmarks features for all images in the folder 'dataset/celeba'.
+    It also extracts the gender label for each image.
+
+    :Args:
+        img_path: the path to the images folder
+        labels_path: the path to the labels.csv file
+
+    :return:
+        landmark_features:  an array containing 68 landmark points for each image in which a face was detected
+        gender_labels:      an array containing the gender label (male=0 and female=1) for each image in
+                            which a face was detected
+
+    labels is index, filename, gender, smiling
+    """
+    image_paths = [os.path.join(img_path, l) for l in os.listdir(img_path)]
+    target_size = None
+    labels_file = open(os.path.join(labels_path, LABELS_FILENAME), 'r')
+
+    labels_df = pd.read_csv(labels_file, sep='\t')
+    face_shape_labels = {row['file_name'] : row['face_shape'] for index, row in labels_df.iterrows()}
+
+    if os.path.isdir(img_path):
+        all_images = []
+        all_labels = []
+
+        for img_path in image_paths:
+
+            file_name = img_path.split('/')[-1]
+
+            print(file_name)
+
+            # load image
+            # img = image.img_to_array(
+            #     image.load_img(img_path,
+            #                    target_size=target_size,
+            #                    interpolation='bicubic')).astype('uint8')
+
+            img, _ = get_image(img_path)
+
+            all_images.append(img)
+            all_labels.append(face_shape_labels[file_name])
+
+    images = np.array(all_images)
+    smile_labels = np.array(all_labels)
+
+    return images, smile_labels
