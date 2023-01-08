@@ -7,18 +7,6 @@ import cv2
 
 LABELS_FILENAME = 'labels.csv'
 
-def get_image(img_path):
-
-    size = 500
-
-    img_array = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
-    img_pil = Image.fromarray(img_array)
-    img_resized = np.array(img_pil.resize((size, size), Image.ANTIALIAS))
-
-    flat_image = img_resized.flatten()
-
-    return flat_image, img_resized
-
 def extract_features_labels(img_path, labels_path):
     """
     This funtion extracts the landmarks features for all images in the folder 'dataset/celeba'.
@@ -46,7 +34,12 @@ def extract_features_labels(img_path, labels_path):
         all_images = []
         all_labels = []
 
+        img_nmb = 0
+
         for img_path in image_paths:
+
+            # if img_nmb > 4:
+            #     break
 
             file_name = img_path.split('/')[-1]
 
@@ -58,10 +51,14 @@ def extract_features_labels(img_path, labels_path):
             #                    target_size=target_size,
             #                    interpolation='bicubic')).astype('uint8')
 
-            img, _ = get_image(img_path)
+            img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+
+            img = cv2.resize(img, (64, 64))
 
             all_images.append(img)
             all_labels.append(face_shape_labels[file_name])
+
+            # img_nmb+=1
 
     images = np.array(all_images)
     smile_labels = np.array(all_labels)

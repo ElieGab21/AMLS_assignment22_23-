@@ -45,7 +45,7 @@ def img_SVM(training_images, training_labels, test_images, test_labels):
     #Scaling the data
     scaler = StandardScaler()
     X_train = scaler.fit_transform(training_images)
-    X_test = scaler .transform(test_images)
+    X_test = scaler.transform(test_images)
 
     #Fitting and training the model with best parameters
     grid.fit(X_train, training_labels)
