@@ -28,7 +28,7 @@ def extract_features_labels(img_path, labels_path):
     labels_file = open(os.path.join(labels_path, LABELS_FILENAME), 'r')
 
     labels_df = pd.read_csv(labels_file, sep='\t')
-    face_shape_labels = {row['file_name'] : row['face_shape'] for index, row in labels_df.iterrows()}
+    eye_color_labels = {row['file_name'] : row['eye_color'] for index, row in labels_df.iterrows()}
 
     if os.path.isdir(img_path):
         all_images = []
@@ -56,11 +56,11 @@ def extract_features_labels(img_path, labels_path):
             img = cv2.resize(img, (64, 64))
 
             all_images.append(img)
-            all_labels.append(face_shape_labels[file_name])
+            all_labels.append(eye_color_labels[file_name])
 
             # img_nmb+=1
 
     images = np.array(all_images)
-    face_labels = np.array(all_labels)
+    eye_labels = np.array(all_labels)
 
-    return images, face_labels
+    return images, eye_labels

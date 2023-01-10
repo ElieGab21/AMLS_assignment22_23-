@@ -23,22 +23,6 @@ def get_data():
 
 def predict(tr_X, tr_Y, te_X, te_Y):
 
-    # print('Starting PCA')
-    # pca = decomposition.PCA(n_components=150, whiten=True)
-    # pca.fit(tr_X)
-
-    # print('Transforming data')
-    # X_train_pca = pca.transform(tr_X)
-    # X_test_pca = pca.transform(te_X)
-
-    # print('Fitting model')
-    # clf = svm.SVC(C=5., gamma=0.001)
-    # clf.fit(X_train_pca, tr_Y)
-
-    # print('Predicting')
-    # pred = clf.predict(X_test_pca)
-    # # pred = softReg.predict(X_test_pca)
-
     # Testing SVM
     clf = Pipeline([('pca', decomposition.PCA(n_components=150, whiten=True)),
                     ('svm', svm.SVC(C=5., gamma=0.001))])
