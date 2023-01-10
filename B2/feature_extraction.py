@@ -1,11 +1,37 @@
 import os
-import tensorflow.keras.utils as image
 from PIL import Image
 import numpy as np
 import pandas as pd
 import cv2
+import dlib
 
 LABELS_FILENAME = 'labels.csv'
+
+detector = dlib.get_frontal_face_detector()
+predictor_path = os.path.join(os.sys.path[0], 'B2/shape_predictor_68_face_landmarks.dat')
+predictor = dlib.shape_predictor(predictor_path)
+
+def run_dlib_extraction(img):
+
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
+
+    detect = detector(gray ,1)
+    num_faces = len(detect)
+
+    if num_faces == 0:
+        return None
+
+    shape = predictor(gray, detect[0])
+
+    x1=shape.part(42).x 
+    x2=shape.part(45).x #43 46 #44 47 
+    y1=shape.part(43).y 
+    y2=shape.part(46).y
+
+    righteye = img[y1:y2, x1:x2]
+
+    return righteye
+
 
 def extract_features_labels(img_path, labels_path):
     """
@@ -38,27 +64,22 @@ def extract_features_labels(img_path, labels_path):
 
         for img_path in image_paths:
 
-            # if img_nmb > 4:
-            #     break
+            if img_nmb > 0:
+                break
 
             file_name = img_path.split('/')[-1]
 
             print(file_name)
 
-            # load image
-            # img = image.img_to_array(
-            #     image.load_img(img_path,
-            #                    target_size=target_size,
-            #                    interpolation='bicubic')).astype('uint8')
+            img = cv2.imread(img_path)
 
-            img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+            features = run_dlib_extraction(img)
 
-            img = cv2.resize(img, (64, 64))
+            if features is not None:
+                all_images.append(features)
+                all_labels.append(eye_color_labels[file_name])
 
-            all_images.append(img)
-            all_labels.append(eye_color_labels[file_name])
-
-            # img_nmb+=1
+            img_nmb+=1
 
     images = np.array(all_images)
     eye_labels = np.array(all_labels)

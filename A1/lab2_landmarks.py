@@ -111,15 +111,6 @@ def extract_features_labels(img_path, labels_path):
     labels_df = pd.read_csv(labels_file, sep='\t')
     gender_labels = {row['img_name'] : row['gender'] for index, row in labels_df.iterrows()}
 
-    # all_images = [i for i in range(len(gender_labels.values()))]
-    # x = np.array(all_images)
-    # y = gender_labels.values()
-    # plt.scatter(x, y)
-    # plt.xlabel('Image number')
-    # plt.ylabel('Male or female distribution')
-    # plt.title('Male or female distribution by image')
-    # plt.show()
-
     if os.path.isdir(img_path):
         all_features = []
         all_labels = []

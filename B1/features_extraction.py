@@ -24,7 +24,6 @@ def extract_features_labels(img_path, labels_path):
     labels is index, filename, gender, smiling
     """
     image_paths = [os.path.join(img_path, l) for l in os.listdir(img_path)]
-    target_size = None
     labels_file = open(os.path.join(labels_path, LABELS_FILENAME), 'r')
 
     labels_df = pd.read_csv(labels_file, sep='\t')
