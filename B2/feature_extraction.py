@@ -69,7 +69,6 @@ def extract_features_labels(img_path, labels_path):
 
     """
     image_paths = [os.path.join(img_path, l) for l in os.listdir(img_path)]
-    target_size = None
     labels_file = open(os.path.join(labels_path, LABELS_FILENAME), 'r')
 
     labels_df = pd.read_csv(labels_file, sep='\t')
@@ -79,12 +78,7 @@ def extract_features_labels(img_path, labels_path):
         all_images = []
         all_labels = []
 
-        img_nmb = 0
-
         for img_path in image_paths:
-
-            if img_nmb > 4:
-                break
 
             file_name = img_path.split('/')[-1]
 
@@ -97,8 +91,6 @@ def extract_features_labels(img_path, labels_path):
             if features is not None:
                 all_images.append(features)
                 all_labels.append(eye_color_labels[file_name])
-
-            img_nmb+=1
 
     images = np.array(all_images)
     eye_labels = np.array(all_labels)
