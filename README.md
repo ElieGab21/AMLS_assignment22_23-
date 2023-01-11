@@ -14,7 +14,7 @@ When the process is finished activate the environment with
 conda activate ml-final
 ```
 
-Finally, one the library **dlib** needs to be installed manually using
+Finally, the library **dlib** needs to be installed manually using
 
 ```
 conda install -c conda-forge dlib
