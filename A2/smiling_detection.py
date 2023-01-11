@@ -10,6 +10,13 @@ from sklearn.model_selection import GridSearchCV
 import os
 
 def get_data():
+    '''
+    This function retrieves the data using the feature extraction function
+
+    returns:
+        tr_X, tr_Y, te_X, te_Y: The datasets 
+    
+    '''
         
     basedir = 'Datasets/celeba'
     base_test_dir = 'Datasets/celeba_test'
@@ -25,6 +32,18 @@ def get_data():
     return tr_X, tr_Y, te_X, te_Y
 
 def first_model_pipeline(X_train, Y_train, X_test, Y_test):
+    """
+    This function tests 5 different models without any tuning
+
+    Args:
+        - X_train: Training X data
+        - Y_train: Training Y data
+        - X_test: testing X data
+        - Y_test: testing Y data
+    
+    Returns:
+        - accuracy_dict: A dictionnary containing the accuracy of each model after prediction
+    """
 
     models_pipeline = [LogisticRegression(solver='liblinear'), SVC(kernel='linear'), SVC(kernel='poly'), KNeighborsClassifier(), DecisionTreeClassifier()]
     accuracy_dict = {}
@@ -43,6 +62,18 @@ def first_model_pipeline(X_train, Y_train, X_test, Y_test):
     return accuracy_dict
 
 def model_tuning(X_train, Y_train, X_test, Y_test):
+    """
+    This function the 3 best models and tunes them using GridSearchCV
+
+    Args:
+        - X_train: Training X data
+        - Y_train: Training Y data
+        - X_test: testing X data
+        - Y_test: testing Y data
+    
+    Returns:
+        - accuracy_dict: A dictionnary containing the accuracy of each model after prediction
+    """
 
     models_pipeline = [LogisticRegression(solver='liblinear'), SVC(kernel='linear'), SVC(kernel='poly')]    
     model_names = ['Log regression', 'SVM (Linear)', 'SVM (Poly)']
@@ -77,6 +108,12 @@ def model_tuning(X_train, Y_train, X_test, Y_test):
 
 
 def predict(training_images, training_labels, test_images, test_labels):
+    """
+    This function calls the two testing functions, first_model_pipeline() and model_tuning()
+    to test the different models. It then uses the best model to fit and predict the dataset
+
+    Prints the accuracy score and classification report
+    """
 
     #Scaling the data
     scaler = MinMaxScaler()

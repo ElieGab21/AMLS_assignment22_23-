@@ -7,12 +7,25 @@ import dlib
 
 LABELS_FILENAME = 'labels.csv'
 
+# Dlib detector and predictors
 detector = dlib.get_frontal_face_detector()
 predictor_path = os.path.join(os.sys.path[0], 'B2/shape_predictor_68_face_landmarks.dat')
 predictor = dlib.shape_predictor(predictor_path)
 
 def run_dlib_extraction(img):
+    """
+    This function detects the eye from the image and returns an indexed image containing
+    only one eye
 
+    Args:
+        - img: the original image
+
+    Returns:
+        - righteye (numpy): A numpy array containing the pixels from the eye
+    
+    """
+
+    # Detecting a face
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
 
     detect = detector(gray ,1)
@@ -29,6 +42,13 @@ def run_dlib_extraction(img):
     y1=shape.part(43).y 
     y2=shape.part(46).y
 
+    #Calculating the center of the eye shape
+    x1 = (x1 + x2)//2 - 10
+    y1 = (y1 + y2)//2 - 10
+    y2 = y1 + 20
+    x2 = x1 + 40
+
+    # Indexing the image with eye coordinates
     righteye = img[y1:y2, x1:x2]
 
     return righteye
@@ -39,16 +59,14 @@ def extract_features_labels(img_path, labels_path):
     This funtion extracts the landmarks features for all images in the folder 'dataset/celeba'.
     It also extracts the gender label for each image.
 
-    :Args:
+    Args:
         img_path: the path to the images folder
         labels_path: the path to the labels.csv file
 
-    :return:
-        landmark_features:  an array containing 68 landmark points for each image in which a face was detected
-        gender_labels:      an array containing the gender label (male=0 and female=1) for each image in
-                            which a face was detected
+    return:
+        images:  an array containing images of the eyes of each image that was detected
+        eye_labels: an array containing the eye label for each image in which a face was detected
 
-    labels is index, filename, gender, smiling
     """
     image_paths = [os.path.join(img_path, l) for l in os.listdir(img_path)]
     target_size = None
@@ -65,7 +83,7 @@ def extract_features_labels(img_path, labels_path):
 
         for img_path in image_paths:
 
-            if img_nmb > 0:
+            if img_nmb > 4:
                 break
 
             file_name = img_path.split('/')[-1]

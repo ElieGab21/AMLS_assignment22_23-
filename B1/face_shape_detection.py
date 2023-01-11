@@ -10,7 +10,13 @@ from sklearn.pipeline import Pipeline
 import numpy as np
 
 def get_data():
+    '''
+    This function retrieves the data using the feature extraction function
 
+    returns:
+        tr_X, tr_Y, te_X, te_Y: The datasets 
+    
+    '''
     basedir = 'Datasets/cartoon_set'
     base_test_dir = 'Datasets/cartoon_set_test'
     img_path = os.path.join(basedir, 'img')
@@ -22,6 +28,12 @@ def get_data():
     return tr_X, tr_Y, te_X, te_Y
 
 def predict(tr_X, tr_Y, te_X, te_Y):
+    """
+    This function perfoms PCA on every image and uses the new data to train the model
+    Two models are tested: SoftMax regression and Support Vector Machine
+
+    Prints the accuracy and classification for each model
+    """
 
     # Testing SVM
     clf = Pipeline([('pca', decomposition.PCA(n_components=150, whiten=True)),

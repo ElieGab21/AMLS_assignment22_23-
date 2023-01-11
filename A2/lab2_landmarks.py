@@ -100,10 +100,9 @@ def extract_features_labels(img_path, labels_path):
 
     :return:
         landmark_features:  an array containing 68 landmark points for each image in which a face was detected
-        gender_labels:      an array containing the gender label (male=0 and female=1) for each image in
+        smile_labels:      an array containing the smile label for each image in
                             which a face was detected
 
-    labels is index, filename, gender, smiling
     """
     image_paths = [os.path.join(img_path, l) for l in os.listdir(img_path)]
     target_size = None
