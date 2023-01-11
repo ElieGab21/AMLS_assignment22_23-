@@ -23,8 +23,9 @@ def run_dlib_extraction(img):
 
     shape = predictor(gray, detect[0])
 
+    # Retrieving right eye from the image
     x1=shape.part(42).x 
-    x2=shape.part(45).x #43 46 #44 47 
+    x2=shape.part(45).x 
     y1=shape.part(43).y 
     y2=shape.part(46).y
 
