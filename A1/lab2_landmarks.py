@@ -65,7 +65,7 @@ def run_dlib_shape(image):
     num_faces = len(rects)
 
     if num_faces == 0:
-        return None, resized_image
+        return None, resized_image 
 
     face_areas = np.zeros((1, num_faces))
     face_shapes = np.zeros((136, num_faces), dtype=np.int64)
